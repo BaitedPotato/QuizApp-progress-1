@@ -45,6 +45,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1; // Returns true if insertion is successful
     }
 
+    public boolean updatePassword(String username, String newPassword) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PASSWORD, newPassword); // Set the new password
+
+        // Update the password where the username matches
+        int result = db.update(TABLE_USERS, values, COLUMN_USERNAME + " = ?", new String[]{username});
+        db.close();
+
+        // Return true if the update was successful
+        return result > 0;
+    }
+
+
     public boolean authenticateUser(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_USERS + " WHERE " +
